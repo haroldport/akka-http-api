@@ -1,5 +1,5 @@
 package com.example.scala_http_api
 
-final class Scalahttpapi {
+final class ScalaHttpApi {
   def greet(name: String): String = "Hello " + name
 }
