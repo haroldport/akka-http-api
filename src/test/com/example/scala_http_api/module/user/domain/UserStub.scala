@@ -1,6 +1,4 @@
-package com.example.scala_http_api.module.user.infrastructure.stub
-
-import com.example.scala_http_api.module.user.domain.User
+package com.example.scala_http_api.module.user.domain
 
 object UserStub {
 

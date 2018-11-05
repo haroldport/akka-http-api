@@ -1,9 +1,8 @@
-package com.example.scala_http_api.module.user.infrastructure.stub
+package com.example.scala_http_api.module.user.domain
 
 import java.util.UUID
 
-import com.example.scala_http_api.module.shared.stub.UuidStub
-import com.example.scala_http_api.module.user.domain.UserId
+import com.example.scala_http_api.module.shared.domain.UuidStub
 
 object UserIdStub {
 

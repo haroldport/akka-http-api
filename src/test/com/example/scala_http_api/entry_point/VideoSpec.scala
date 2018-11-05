@@ -1,11 +1,10 @@
 package com.example.scala_http_api.entry_point
 
 import scala.concurrent.duration._
-
 import akka.http.scaladsl.model.{ContentTypes, StatusCodes}
+import com.example.scala_http_api.module.video.domain.VideoStub
 import spray.json._
 import com.example.scala_http_api.module.video.infrastructure.marshaller.VideoJsValueMarshaller
-import com.example.scala_http_api.module.video.infrastructure.stub.VideoStub
 
 final class VideoSpec extends AcceptanceSpec {
   "save a video" in post(

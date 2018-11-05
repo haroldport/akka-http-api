@@ -1,4 +1,4 @@
-package com.example.scala_http_api.module.shared.stub
+package com.example.scala_http_api.module.shared.domain
 
 import java.util.UUID
 

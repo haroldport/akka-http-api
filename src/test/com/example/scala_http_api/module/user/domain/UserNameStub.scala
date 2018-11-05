@@ -1,7 +1,6 @@
-package com.example.scala_http_api.module.user.infrastructure.stub
+package com.example.scala_http_api.module.user.domain
 
-import com.example.scala_http_api.module.shared.stub.{IntStub, StringStub}
-import com.example.scala_http_api.module.user.domain.UserName
+import com.example.scala_http_api.module.shared.domain.{IntStub, StringStub}
 
 object UserNameStub {
 
