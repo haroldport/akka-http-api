@@ -3,29 +3,37 @@ package com.example.scala_http_api.entry_point
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.stream.ActorMaterializer
+import com.example.scala_http_api.module.shared.bus.infrastructure.rabbit_mq.RabbitMqConfig
+import com.example.scala_http_api.module.shared.dependency_injection.infrastructure.SharedModuleDependencyContainer
+import com.example.scala_http_api.module.shared.persistence.infrastructure.doobie.JdbcConfig
 import com.example.scala_http_api.module.user.infrastructure.dependency_injection.UserModuleDependencyContainer
 import com.example.scala_http_api.module.video.infrastructure.dependency_injection.VideoModuleDependencyContainer
 import com.typesafe.config.ConfigFactory
 
-import scala.concurrent.ExecutionContextExecutor
+import scala.concurrent.ExecutionContext
 import scala.io.StdIn
 
 object ScalaHttpApi {
   def main(args: Array[String]): Unit = {
-    val appConfig       = ConfigFactory.load("application")
-    val serverConfig    = ConfigFactory.load("http-server")
+    val appConfig    = ConfigFactory.load("application")
+    val serverConfig = ConfigFactory.load("http-server")
 
     val actorSystemName = appConfig.getString("main-actor-system.name")
     val host            = serverConfig.getString("http-server.host")
     val port            = serverConfig.getInt("http-server.port")
 
-    implicit val system: ActorSystem                        = ActorSystem(actorSystemName)
-    implicit val materializer: ActorMaterializer            = ActorMaterializer()
-    implicit val executionContext: ExecutionContextExecutor = system.dispatcher
+    val dbConfig        = JdbcConfig(appConfig.getConfig("database"))
+    val publisherConfig = RabbitMqConfig(appConfig.getConfig("message-publisher"))
+
+    val sharedDependencies = new SharedModuleDependencyContainer(actorSystemName, dbConfig, publisherConfig)
+
+    implicit val system: ActorSystem                = sharedDependencies.actorSystem
+    implicit val materializer: ActorMaterializer    = sharedDependencies.materializer
+    implicit val executionContext: ExecutionContext = sharedDependencies.executionContext
 
     val container = new EntryPointDependencyContainer(
-      new UserModuleDependencyContainer,
-      new VideoModuleDependencyContainer
+      new UserModuleDependencyContainer(sharedDependencies.doobieDbConnection, sharedDependencies.messagePublisher),
+      new VideoModuleDependencyContainer(sharedDependencies.doobieDbConnection, sharedDependencies.messagePublisher)
     )
 
     val routes = new Routes(container)
@@ -37,11 +45,12 @@ object ScalaHttpApi {
       pprint.log(t)
     }
 
+    // let it run until user presses return
     println(s"Server online at http://$host:$port/\nPress RETURN to stop...")
     StdIn.readLine()
 
     bindingFuture
       .flatMap(_.unbind())
-      .onComplete(_ => system.terminate())
+      .onComplete(_ => sharedDependencies.actorSystem.terminate())
   }
 }

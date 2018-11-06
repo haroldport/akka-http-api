@@ -4,7 +4,6 @@ import com.example.scala_http_api.module.user.domain.User
 import spray.json.{JsArray, JsObject, JsString}
 
 object UserJsValueMarshaller {
-
   def marshall(users: Seq[User]): JsArray = JsArray(
     users
       .map(
@@ -15,5 +14,4 @@ object UserJsValueMarshaller {
           ))
       .toVector
   )
-
 }
