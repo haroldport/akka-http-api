@@ -3,7 +3,7 @@ package com.example.scala_http_api.module.shared.bus.domain
 import com.example.scala_http_api.module.shared.bus.domain.Message.application
 
 object Message {
-  val application: String = "codelytv_scala_api"
+  val application: String = "scala_api"
 }
 
 abstract class Message {

@@ -16,8 +16,8 @@ object MessageJsonFormatMarshaller extends DefaultJsonProtocol {
     }
 
     override def read(jv: JsValue): Message = jv.asJsObject.getFields("type") match {
-      case Seq(JsString("codelytv_scala_api.video_created"))   => jv.convertTo[VideoCreated]
-      case Seq(JsString("codelytv_scala_api.user_registered")) => jv.convertTo[UserRegistered]
+      case Seq(JsString("scala_api.video_created"))   => jv.convertTo[VideoCreated]
+      case Seq(JsString("scala_api.user_registered")) => jv.convertTo[UserRegistered]
       case Seq(JsString(unknown)) =>
         throw DeserializationException(s"Unknown message type to read <$unknown>")
     }
