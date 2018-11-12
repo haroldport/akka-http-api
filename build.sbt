@@ -2,14 +2,12 @@
 name := "Scala HTTP API"
 version := "1.0"
 
-/** ********* PROJECT SETTINGS ******************/
 Configuration.settings
 
-/** ********* PROD DEPENDENCIES *****************/
 libraryDependencies ++= Dependencies.production
-
-/** ********* TEST DEPENDENCIES *****************/
 libraryDependencies ++= Dependencies.test
+
+enablePlugins(JavaAppPackaging) // App packaging. More info: https://github.com/sbt/sbt-native-packager
 
 /** ********* COMMANDS ALIASES ******************/
 addCommandAlias("t", "test")
